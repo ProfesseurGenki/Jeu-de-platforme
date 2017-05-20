@@ -1,0 +1,542 @@
+var canvas;
+var context;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//Variables vitesse
+var vitX = 10;
+var vitY = 20;
+var vitXMob = 20;
+var vitXMob2 = 0;
+var vitXMob3 = 0 ;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//Saut
+var saut = 50;
+//Variables du penguin
+var pengou;
+var peng = new Image();
+	peng.src = "pengou2.png";
+//position en X et en Y
+var posAX = 130;
+var posAY = 330;
+//hauteur et largeur de l'image du penguin
+var h_penguin = 150;
+var l_penguin = 100;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//Variables des événements des touches pour le controle du perso
+var fleche_droite = 39;
+var fleche_gauche = 37;
+var fleche_haut = 38;
+var fleche_bas = 40;
+var SPACE = 32;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//Variables du sol (c'est une plateforme invisible)
+var posBX = 0;
+var posBY = 500;
+var largeurB=700;
+var hauteurB = 50;
+
+//image des plateformes
+var plateforme;
+var platou = new Image();
+	platou.src = "platform2.png";
+	
+//hauteur et largeur de toutes les plateformes
+var largeurP=100;
+var hauteurP = 60;
+
+//Variables platforme1
+var posP1X = 300;
+var posP1Y = 200;
+
+//Variables platforme2
+var posP2X = 700;
+var posP2Y = 250;
+
+//Variables platforme3 (invisible)
+var posP3X = 1000;
+var posP3Y = 200;
+
+//Variables platforme4
+var posP4X = 1400;
+var posP4Y = 350;
+
+//Variables platforme5
+var posP5X = 1600;
+var posP5Y = 200;
+
+//Variables platforme6
+var posP6X = 1800;
+var posP6Y = 80;
+
+//Variables platforme7
+var posP7X = 2500;
+var posP7Y = 250;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//image du trou noir
+var trou;
+var trou_noir = new Image();
+	trou_noir.src = "trou2.png";
+var l_noir = 100;
+var h_noir = 50;
+
+//Premier trou noir
+var posTrou_NoirX = 1030;
+var posTrou_NoirY = 430;
+//Deuxième trou noir
+var posTrou_NoirX2 = 1800;
+var posTrou_NoirY2 = 430;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//variable activation active mob volant
+var ActMobX = 2450;
+var ActMobY = 430;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//Variables des yoshis
+//appel image yoshi
+var fat;
+var fatty = new Image();
+	fatty.src = "Mob1.png";
+var posDX = 3800;
+var posDY = 360;
+
+//yoshi 1
+var posDX1 = 3000;
+var posDY1 = 350;
+
+//yoshi 2
+var posDX2 = 3500;
+var posDY2 = 350;
+
+//yoshi 3
+var posDX3 = 4000;
+var posDY3 = 350;
+
+//yoshi 4
+var posDX4 = 4500;
+var posDY4 = 350;
+
+//yoshi 5
+var posDX5 = 5000;
+var posDY5 = 350;
+
+//yoshi 6
+var largeurD=50;
+var hauteurD = 50;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//Variable des ennemis volants
+//appel image mob volant
+var Mob2;
+var mobVolant = new Image();
+	mobVolant.src = "volant2.png";
+
+//hauteur et largeur de tous le ennemis volants
+var l_Vol = 150;
+var h_Vol = 150;
+
+// position volant 1
+var posVolX = 2500;
+var posVolY = 70;
+
+//position volant 2
+var posVolX2 = 2800;
+var posVolY2 = 150;
+
+// position volant 3
+var posVolX3 = 3100;
+var posVolY3 = 70;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//variables assaciés aux touches
+var Direction =
+    
+{
+	Aucune	: {value: 0, name: "Aucune", code: "A"}, 
+	Gauche	: {value: 1, name: "Gauche", code: "G"}, 
+	Droite	: {value: 2, name: "Droite", code: "D"},
+	Haut	: {value: 3, name: "Haut", code: "H"},
+	Space   : {value: 4, name: "Space", code: "R"},
+}
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//Variables de Background	
+var bg;
+var fond = new Image();
+	fond.src = "sol.png";
+
+//placement de bg
+var posCX = 0;
+var posCY = 260;
+//Variables ciel
+var ciel;
+var ciel = new Image ();
+	ciel.src = "ciel.png";
+
+//image game over
+var perdre;
+var perdu = new Image();
+	perdu.src = "Game_Over.png";
+
+//GO Ciel
+var go_ciel;
+var gociel = new Image();
+	gociel.src = "go_ciel.png";
+
+//pique
+var go_pique;
+var gopique = new Image();
+	gopique.src = "go_pique.png";
+
+//GO trou noir
+var go_trou;
+var gotrou = new Image();
+	gotrou.src = "go_trou2.png";
+	
+//GO ecureuil
+var go_ecureuil;
+var goecureuil = new Image();
+	goecureuil.src = "go_ecureuil.png";
+
+//Fin
+var fin;
+var fin_niv = new Image();
+	fin_niv.src = "fin_niv.png";
+
+var place_imageX = 0;
+var place_imageY = 0;
+ 
+//Pique	
+var mort;
+var mourru = new Image();
+	mourru.src = "pic2.png";
+var piqueX = 430;
+var piqueY = 300;
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+
+//#############################################################################################################################//
+
+window.onload = function () //fonction pour appeler le js dans le site
+{
+	canvas = document.getElementById("canevas");
+	context = canvas.getContext('2d');
+	dessine ();   
+	setInterval(animate, 20);
+}
+
+//#############################################################################################################################//
+
+
+window.onkeyup = function(event) //fonction pour qu'il n'y ai aucun evenement lorque que l'on retire le doigt du bouton
+{
+direction = Direction.Aucune;
+}
+
+//#############################################################################################################################//
+
+window.onkeydown = function(event) //fonc qui associe les touches du clavier
+{
+	switch (event.keyCode)
+		{
+			case 39 :
+				direction = Direction.Droite;
+			break;
+				
+			case 37 :
+				direction = Direction.Gauche;
+			break;
+			
+			case 38 : 
+				direction = Direction.Haut;
+			break;
+				
+			case 32 : 
+				window.location.reload();
+			break;
+		}
+}
+
+//#############################################################################################################################//
+
+
+function avance_position()
+{
+    
+//-------------------------------------------------------------------------------------------------------------------------------//    
+	//vitesse des yoshi
+	posDX1 += -vitXMob3;
+	posDX2 += -vitXMob3;
+	posDX3 += -vitXMob3;
+	posDX4 += -vitXMob3;
+	posDX5 += -vitXMob3;
+    
+    //vitesse ennemis volants
+	posVolX += -vitXMob2;
+	posVolX2 += -vitXMob2;
+	posVolX3 += -vitXMob2;
+    	
+	//Gravité
+	posAY += vitY;
+    
+//-------------------------------------------------------------------------------------------------------------------------------//  
+ 
+	//Collison platformes
+	if((!(posBX > posAX + l_penguin || posBX < posAX - largeurB || posBY > posAY + h_penguin || posBY < posAY))|| //Sol
+	(!(posP1X > posAX + l_penguin || posP1X < posAX - h_penguin || posP1Y +hauteurP > posAY + h_penguin || posP1Y < posAY)) ||
+	(!(posP2X > posAX + l_penguin || posP2X < posAX - h_penguin || posP2Y + hauteurP > posAY + h_penguin || posP2Y < posAY))||
+	(!(posP3X > posAX + l_penguin || posP3X < posAX - h_penguin || posP3Y + hauteurP> posAY + h_penguin || posP3Y < posAY)) ||
+	(!(posP5X > posAX + l_penguin || posP5X < posAX - h_penguin || posP5Y + hauteurP> posAY + h_penguin || posP5Y < posAY)) ||
+	(!(posP6X > posAX + l_penguin || posP6X < posAX - h_penguin || posP6Y + hauteurP> posAY + h_penguin || posP6Y < posAY)) || 
+	(!(posP7X > posAX + l_penguin || posP7X < posAX - h_penguin || posP7Y + hauteurP> posAY + h_penguin || posP7Y < posAY))) 
+	vitY = 0;
+	
+    //active le ennemis volants
+    else if (!(posP4X > posAX + l_penguin || posP4X < posAX - h_penguin || posP4Y + hauteurP > posAY + h_penguin || posP4Y <posAY))
+            
+		{
+			vitY = 0; 
+			vitXMob2 = 15;
+
+		}
+    
+    // décollison des plateformes
+    else if(((posBX > posAX + l_penguin || posBX < posAX - largeurB || posBY > posAY + h_penguin || posBY < posAY))||
+	(posP1X > posAX + l_penguin || posP1X < posAX - h_penguin || posP1Y + hauteurP > posAY + h_penguin || posP1Y < posAY) ||
+	(posP2X > posAX + l_penguin || posP2X < posAX - h_penguin || posP2Y + hauteurP > posAY + h_penguin || posP2Y < posAY) ||
+	(posP3X > posAX + l_penguin || posP3X < posAX - h_penguin || posP3Y + hauteurP > posAY + h_penguin || posP3Y < posAY) ||
+    (posP4X > posAX + l_penguin || posP4X < posAX - h_penguin || posP4Y + hauteurP > posAY + h_penguin || posP4Y < posAY) ||
+	(posP5X > posAX + l_penguin || posP5X < posAX - h_penguin || posP5Y + hauteurP > posAY + h_penguin || posP5Y < posAY) ||
+	(posP6X > posAX + l_penguin || posP6X < posAX - h_penguin || posP6Y + hauteurP > posAY + h_penguin || posP6Y < posAY) || 
+	(posP7X > posAX + l_penguin || posP7X < posAX - h_penguin || posP7Y + hauteurP > posAY + h_penguin || posP7Y < posAY)) 
+	vitY = 20;
+	
+//-------------------------------------------------------------------------------------------------------------------------------//	
+
+	//decors qui bougent quand on active les touches avant/arriere
+	switch (direction.name)
+		{
+			case "Gauche" :
+				posCX += vitX; 
+				posP1X += vitX; 
+				posP2X += vitX; 
+				posTrou_NoirX += vitX; 
+				posTrou_NoirX2 += vitX; 
+				ActMobX += vitX; 
+				posP3X += vitX; 
+				posP4X += vitX; 
+				posP5X += vitX; 
+				posP6X += vitX;
+				posP7X += vitX;
+				piqueX += vitX;
+				posDX += vitX;
+				posDX1 += vitX;
+				posDX2 += vitX;
+				posDX3 += vitX;
+				posDX4 += vitX;
+				posDX5 += vitX;
+				posVolX += vitX;
+				posVolX2 += vitX;
+				posVolX3 += vitX;
+			
+			break;
+	
+			case "Droite" :
+				posCX -= vitX; 
+				posP1X -= vitX; 
+				posP2X -= vitX; 
+				posTrou_NoirX -= vitX; 
+				posTrou_NoirX2 -= vitX; 
+				ActMobX -= vitX; 
+				posP3X -= vitX; 
+				posP4X -= vitX; 
+				posP5X -= vitX; 
+				posP6X -= vitX; 
+				posP7X -= vitX; 
+				piqueX -= vitX;
+				posDX -= vitX;
+				posDX1 -= vitX;
+				posDX2 -= vitX;
+				posDX3 -= vitX;
+				posDX4 -= vitX;
+				posDX5 -= vitX;
+				posVolX -= vitX;
+				posVolX2 -= vitX;
+				posVolX3 -= vitX;
+		
+			break;	
+			
+			case "Haut" :
+				posAY -= saut;
+			break;
+	
+//-------------------------------------------------------------------------------------------------------------------------------//
+			
+		}
+}
+
+//#############################################################################################################################//
+
+function animate() //pour lancer le jeu
+{
+	avance_position();
+	dessine();
+}
+
+//#############################################################################################################################//
+
+function dessine() //afficher les images du jeu
+{  
+  
+    context.clearRect(0,0, canvas.width, canvas.height);
+    context.beginPath();
+    
+//-------------------------------------------------------------------------------------------------------------------------------// 
+ 
+  //Bg
+    context.drawImage(fond, posCX, posCY);
+  
+  //Pique
+    context.drawImage(mourru, piqueX, piqueY);
+  
+  //Dessine les yoshis
+    context.drawImage(fatty, posDX1, posDY1);
+    context.drawImage(fatty, posDX2, posDY2);
+    context.drawImage(fatty, posDX3, posDY3);
+    context.drawImage(fatty, posDX4, posDY4);
+    context.drawImage(fatty, posDX5, posDY5);
+  
+  //Platforme1
+    context.drawImage(platou, posP1X, posP1Y);
+  //Platforme2
+    context.drawImage(platou, posP2X, posP2Y);
+  //Platforme3 (invisible)
+  //Platforme4
+    context.drawImage(platou, posP4X, posP4Y);
+  //Platforme5
+    context.drawImage(platou, posP5X, posP5Y);
+  //Platforme6 
+    context.drawImage(platou, posP6X, posP6Y);
+  //Platforme7
+    context.drawImage(platou, posP7X, posP7Y);
+
+   //Trou Noir
+    context.drawImage(trou_noir, posTrou_NoirX, posTrou_NoirY);
+    context.drawImage(trou_noir, posTrou_NoirX2, posTrou_NoirY2);
+    
+   //Dessine les mob volants
+    context.drawImage(mobVolant, posVolX, posVolY);
+    context.drawImage(mobVolant, posVolX2, posVolY2);
+    context.drawImage(mobVolant, posVolX3, posVolY3);
+    
+  //Penguin
+    context.drawImage(peng, posAX, posAY);
+    
+//-------------------------------------------------------------------------------------------------------------------------------//	
+
+  //Collision entre le penguin et les yoshis
+  if((!(posDX1 > posAX + l_penguin || posDX1 < posAX - largeurD || posDY1 > posAY + h_penguin || posDY1 < posAY))||
+     (!(posDX2 > posAX + l_penguin || posDX2 < posAX - largeurD || posDY2 > posAY + h_penguin || posDY2 < posAY))||
+     (!(posDX3 > posAX + l_penguin || posDX3 < posAX - largeurD || posDY3 > posAY + h_penguin || posDY3 < posAY))||
+     (!(posDX4 > posAX + l_penguin || posDX4 < posAX - largeurD || posDY4 > posAY + h_penguin || posDY4 < posAY))||
+     (!(posDX5 > posAX + l_penguin || posDX5 < posAX - largeurD || posDY5 > posAY + h_penguin || posDY5 < posAY)))
+      
+        {
+            vitXMob = 0;
+	        vitX = 0;
+	        context.drawImage(perdu, place_imageX, place_imageY);
+	        Direction = Direction.Aucune;
+        }	
+  
+    //Collision penguin et MobVolant
+   else if((!(posVolX > posAX + l_penguin || posVolX < posAX - l_Vol || posVolY  > posAY + h_penguin || posVolY < posAY))||
+	      (!(posVolX2 > posAX + l_penguin || posVolX2 < posAX - l_Vol || posVolY2  > posAY + h_penguin || posVolY2 < posAY))||
+	      (!(posVolX3 > posAX + l_penguin || posVolX3 < posAX - l_Vol || posVolY3  > posAY + h_penguin || posVolY3 < posAY)))
+    
+        {
+	       vitXMob = 0;
+	       vitX = 0;
+	       context.drawImage(goecureuil, place_imageX, place_imageY);
+	       Direction = Direction.Aucune;
+        }	
+	
+  //collision avec les cotés
+  	else if ((posCX > 100 || posAY < -10))
+        {
+	       vitX = 0;
+	       context.drawImage(gociel, place_imageX, place_imageY);
+	       vitY = 0;
+	       Direction = Direction.Aucune;
+        }	
+    
+  	  else if ((!(posTrou_NoirX > posAX + l_penguin || posTrou_NoirX < posAX - l_noir || posTrou_NoirY + h_noir > posAY + h_penguin  || posTrou_NoirY < posAY)) || 
+               
+              (!(posTrou_NoirX2 > posAX +l_penguin || posTrou_NoirX2 < posAX - l_noir || posTrou_NoirY2 + h_noir > posAY + h_penguin || posTrou_NoirY2 < posAY)))
+  {
+	  context.drawImage(gotrou, place_imageX, place_imageY);
+	  vitX = 0;
+	  Direction = Direction.Aucune;
+
+	  
+  }
+    
+  else if ((!(ActMobX > posAX + l_penguin || ActMobX < posAX - l_noir ||ActMobY + 50 > posAY + h_penguin || ActMobY < posAY)))
+             
+		{
+			vitY = 0; 
+			vitXMob3 = 20;
+
+		}
+    
+  else if ((!(posDX > posAX + l_penguin || posDX < posAX - largeurD || posDY > posAY + h_penguin || posDY < posAY)))
+        {
+            
+            context.drawImage(fin_niv, place_imageX, place_imageY);
+	        vitX = 0;
+	        Direction = Direction.Aucune;
+    
+        }
+		
+//-------------------------------------------------------------------------------------------------------------------------------//
+    
+  context.closePath();
+  context.fill();
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
