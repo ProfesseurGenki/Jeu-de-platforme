@@ -6,9 +6,8 @@ var context;
 //Variables vitesse
 var vitX = 10;
 var vitY = 20;
-var vitXMob = 20;
-var vitXMob2 = 0;
-var vitXMob3 = 0 ;
+var vitXMob = 0;
+var vitXMob2 = 0 ;
 
 //-------------------------------------------------------------------------------------------------------------------------------//
 
@@ -31,22 +30,21 @@ var l_penguin = 100;
 var fleche_droite = 39;
 var fleche_gauche = 37;
 var fleche_haut = 38;
-var fleche_bas = 40;
 var SPACE = 32;
 
 //-------------------------------------------------------------------------------------------------------------------------------//
-
-//Variables du sol (c'est une plateforme invisible)
-var posBX = 0;
-var posBY = 500;
-var largeurB=700;
-var hauteurB = 50;
 
 //image des plateformes
 var plateforme;
 var platou = new Image();
 	platou.src = "platform2.png";
 	
+//Variables du sol (c'est une plateforme invisible)
+var posBX = 0;
+var posBY = 500;
+var largeurB=4500;
+var hauteurB = 50;
+
 //hauteur et largeur de toutes les plateformes
 var largeurP=100;
 var hauteurP = 60;
@@ -253,19 +251,19 @@ window.onkeydown = function(event) //fonc qui associe les touches du clavier
 {
 	switch (event.keyCode)
 		{
-			case 39 :
+			case fleche_droite :
 				direction = Direction.Droite;
 			break;
 				
-			case 37 :
+			case fleche_gauche :
 				direction = Direction.Gauche;
 			break;
 			
-			case 38 : 
+			case fleche_haut : 
 				direction = Direction.Haut;
 			break;
 				
-			case 32 : 
+			case SPACE : 
 				window.location.reload();
 			break;
 		}
@@ -279,16 +277,16 @@ function avance_position()
     
 //-------------------------------------------------------------------------------------------------------------------------------//    
 	//vitesse des yoshi
-	posDX1 += -vitXMob3;
-	posDX2 += -vitXMob3;
-	posDX3 += -vitXMob3;
-	posDX4 += -vitXMob3;
-	posDX5 += -vitXMob3;
+	posDX1 += -vitXMob2;
+	posDX2 += -vitXMob2;
+	posDX3 += -vitXMob2;
+	posDX4 += -vitXMob2;
+	posDX5 += -vitXMob2;
     
     //vitesse ennemis volants
-	posVolX += -vitXMob2;
-	posVolX2 += -vitXMob2;
-	posVolX3 += -vitXMob2;
+	posVolX += -vitXMob;
+	posVolX2 += -vitXMob;
+	posVolX3 += -vitXMob;
     	
 	//Gravité
 	posAY += vitY;
@@ -310,7 +308,7 @@ function avance_position()
             
 		{
 			vitY = 0; 
-			vitXMob2 = 15;
+			vitXMob = 15;
 
 		}
     
@@ -391,7 +389,7 @@ function avance_position()
 
 //#############################################################################################################################//
 
-function animate() //pour lancer le jeu
+function animate() //pour animer le jeu
 {
 	avance_position();
 	dessine();
@@ -470,6 +468,7 @@ function dessine() //afficher les images du jeu
         {
 	       vitXMob = 0;
 	       vitX = 0;
+	       vitY = 0;
 	       context.drawImage(goecureuil, place_imageX, place_imageY);
 	       Direction = Direction.Aucune;
         }	
@@ -478,8 +477,8 @@ function dessine() //afficher les images du jeu
   	else if ((posCX > 100 || posAY < -10))
         {
 	       vitX = 0;
+           vitY = 0;
 	       context.drawImage(gociel, place_imageX, place_imageY);
-	       vitY = 0;
 	       Direction = Direction.Aucune;
         }	
     
@@ -498,7 +497,7 @@ function dessine() //afficher les images du jeu
              
 		{
 			vitY = 0; 
-			vitXMob3 = 20;
+			vitXMob2 = 20;
 
 		}
     
@@ -517,26 +516,3 @@ function dessine() //afficher les images du jeu
   context.fill();
   
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
